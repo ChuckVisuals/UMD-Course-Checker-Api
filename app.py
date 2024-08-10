@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import requests
 from bs4 import BeautifulSoup
 
 app = Flask(__name__)
+cors = CORS(app, supports_credentials=True)
 
 #base route to check if the API is online
 @app.route('/', methods=['GET'])
