@@ -9,7 +9,7 @@ import os
 #GLOBAL STUFF
 load_dotenv()
 mainEmail = "umdcoursechecker@outlook.com"
-password = os.getenv("PASSWORD")
+password = os.environ.get("PASSWORD")
 
 app = Flask(__name__)
 cors = CORS(app, supports_credentials=True)
