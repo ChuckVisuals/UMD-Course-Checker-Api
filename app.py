@@ -41,3 +41,17 @@ def get_seats():
                 return jsonify({'open_seats': int(seat_span.text.strip())})
             
     return jsonify({'error': 'Section not found'}), 404
+
+
+@app.route('/sendEmailOnRegistar', methods=['POST'])
+def sendEmailOnRegistar():
+    email = request.args.get('email')
+    name = request.args.get('name')
+    
+    if not email or not name:
+        return jsonify({'error': 'Missing required parameters'}), 400
+    
+    #testing getting data from the request
+    print(email, name)
+    
+    
