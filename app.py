@@ -2,6 +2,14 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
 from bs4 import BeautifulSoup
+import smtplib
+from dotenv import load_dotenv
+import os
+
+#GLOBAL STUFF
+load_dotenv()
+mainEmail = "umdcoursechecker@outlook.com"
+password = os.getenv("PASSWORD")
 
 app = Flask(__name__)
 cors = CORS(app, supports_credentials=True)
@@ -45,13 +53,25 @@ def get_seats():
 
 @app.route('/sendEmailOnRegistar', methods=['POST'])
 def sendEmailOnRegistar():
-    email = request.args.get('email')
-    name = request.args.get('name')
+    
+    data = request.json
+    if not data:
+        return jsonify({'error': 'Invalid JSON'}), 400
+
+    email = data.get('email')
+    name = data.get('name')
     
     if not email or not name:
         return jsonify({'error': 'Missing required parameters'}), 400
     
-    #testing getting data from the request
-    print(email, name)
-    return 200
+    # Log the received data for debugging
+    print(f"Received email: {email}, name: {name}")
+    
+    server = smtplib.SMTP('smtp-mail.outlook.com', 587)
+    server.starttls()
+    server.login(mainEmail, password)
+    server.sendmail(mainEmail, email, f"Subject: Thanks for signing up to UMD Course Checker!\n\nHello, {name}!\n\nYou will receive emails from this address once your class opens up, make sure you add your class in the dashboard and we'll do the rest!\n\nIf you have any questions, feel free to reach out to us at thru our email: {mainEmail}")
+    server.quit()
+    return jsonify({'message': 'Email Sent'}), 200
+    
     
