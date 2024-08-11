@@ -53,5 +53,5 @@ def sendEmailOnRegistar():
     
     #testing getting data from the request
     print(email, name)
-    
+    return 200
     
